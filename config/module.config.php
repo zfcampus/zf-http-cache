@@ -1,13 +1,16 @@
 <?php
-return array(
-    'service_manager' => array(
-        'factories' => array(
-            'ZF\HttpCache\HttpCacheListener' => 'ZF\HttpCache\HttpCacheListenerFactory',
-        ),
-    ),
+use ZF\HttpCache\HttpCacheListener;
+use ZF\HttpCache\HttpCacheListenerFactory;
 
-    'zf-http-cache' => array(
-    //    'controllers' => array(
+return [
+    'service_manager' => [
+        'factories' => [
+            HttpCacheListener::class => HttpCacheListenerFactory::class,
+        ],
+    ],
+
+    'zf-http-cache' => [
+    //    'controllers' => [
     //        /*
     //         * Wildcards: in the example below all the responses for the controllers
     //         * and HTTP methods others than those configured will have a
@@ -17,40 +20,40 @@ return array(
     //         * All the responses for a non configured HTTP method within a
     //         * configured controller will have the same behavior.
     //         */
-    //        '*' => array( // No cache by default
-    //    	      '*' => array(
-    //                'cache-control' => array(
+    //        '*' => [ // No cache by default
+    //    	      '*' => [
+    //                'cache-control' => [
     //                    'override' => false,
     //                    'value'    => 'private',
-    //                ),
-    //            ),
-    //        ),
+    //                ],
+    //            ],
+    //        ],
     //
     //        /*
     //         * You can provide a wildcard along with configured HTTP methods within
     //         * a controller configuration in order to configure all non listed HTTP
     //         * methods for this controller.
     //         */
-    //        'my-controller-name' => array(
-    //            'get' => array(
-    //                'cache-control' => array(
+    //        'my-controller-name' => [
+    //            'get' => [
+    //                'cache-control' => [
     //                    'override' => true,
     //                    'value'    => 'public,
-    //                ),
-    //            ),
-    //            '*' => array(
-    //                'cache-control' => array(
+    //                ],
+    //            ],
+    //            '*' => [
+    //                'cache-control' => [
     //                    'override' => false,
     //                    'value'    => 'private',
-    //                ),
-    //            ),
-    //        ),
+    //                ],
+    //            ],
+    //        ],
     //
     //        /*
     //         * Regular configuration.
     //         */
-    //        'home' => array( // controller name
-    //            'get' => array( // Http method (wildcard '*' supported as whatever method)
+    //        'home' => [ // controller name
+    //            'get' => [ // Http method (wildcard '*' supported as whatever method)
     //                /*
     //                 * General HTTP caching theory: http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
     //                 * Apache point of view: http://httpd.apache.org/docs/current/mod/mod_proxy.html
@@ -59,32 +62,32 @@ return array(
     //                 */
     //
     //                // Cache-Control: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
-    //                'cache-control' => array(
+    //                'cache-control' => [
     //                    'override' => true, // Whether to override cache-control header if already present in response, false by default
     //                    'value'    => 'public, must-revalidate, max-age=86400',
-    //                ),
+    //                ],
     //
     //                // Expires: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
     //                // Cache-Control *always* overrides Expires
-    //                'expires' => array(
+    //                'expires' => [
     //                    'override' => true, // Whether to override expires header if already present in response
     //                    'value'    => '+1 day', // Can be all format accepted by DateTime::__construct(): http://www.php.net/manual/en/datetime.formats.php
-    //                ),
+    //                ],
     //
     //                // Pragma: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32
-    //                'pragma' => array(
+    //                'pragma' => [
     //                    'override' => true, // Whether to override pragma header if already present in response
     //                    'value'    => '',
-    //                ),
+    //                ],
     //
     //                // Vary: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
-    //                'vary' => array(
+    //                'vary' => [
     //                    'override' => true, // Whether to override vary header if already present in response
     //                    'value'    => 'accept-encoding, x-requested-with',
-    //                ),
-    //            ),
-    //        ),
-    //    ),
+    //                ],
+    //            ],
+    //        ],
+    //    ],
     //
     //    /*
     //     * Whether to enable http cache.
@@ -95,7 +98,7 @@ return array(
     //     * Never cache these HTTP status codes.
     //     * Defaults to all others than 200.
     //     */
-    //    'http_codes_black_list' => array(),
+    //    'http_codes_black_list' => [],
     //
     //    /*
     //     * Delimiter used to mark a controller name as being a regexp.
@@ -104,5 +107,5 @@ return array(
     //     * Regexp wins over wildcard.
     //     */
     //    'regex_delimiter' => '~',
-    ),
-);
+    ],
+];

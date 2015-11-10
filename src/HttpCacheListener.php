@@ -19,12 +19,12 @@ class HttpCacheListener extends AbstractListenerAggregate
     /**
      * @var array
      */
-    protected $cacheConfig = array();
+    protected $cacheConfig = [];
 
     /**
      * @var array
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * @param EventManagerInterface $events
@@ -32,8 +32,8 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -1000);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onResponse'), -1000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -1000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'onResponse'], -1000);
     }
 
     /**
@@ -119,7 +119,7 @@ class HttpCacheListener extends AbstractListenerAggregate
         if (! empty($this->config['controllers'])) {
             $cacheConfig = $this->config['controllers'];
         } else {
-            $this->cacheConfig = array();
+            $this->cacheConfig = [];
 
             return;
         }
@@ -141,7 +141,7 @@ class HttpCacheListener extends AbstractListenerAggregate
         } elseif (! empty($cacheConfig['*'])) {
             $controllerConfig = $cacheConfig['*'];
         } else {
-            $this->cacheConfig = array();
+            $this->cacheConfig = [];
 
             return;
         }
@@ -157,7 +157,7 @@ class HttpCacheListener extends AbstractListenerAggregate
         } elseif (! empty($cacheConfig['*']['*'])) {
             $methodConfig = $cacheConfig['*']['*'];
         } else {
-            $this->cacheConfig = array();
+            $this->cacheConfig = [];
 
             return;
         }

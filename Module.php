@@ -8,9 +8,9 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return array('Zend\Loader\StandardAutoloader' => array('namespaces' => array(
+        return [Zend\Loader\StandardAutoloader::class => ['namespaces' => [
             __NAMESPACE__ => __DIR__.'/src/',
-        )));
+        ]]];
     }
 
     /**
@@ -27,6 +27,6 @@ class Module
         $em  = $app->getEventManager();
         $sm  = $app->getServiceManager();
 
-        $em->attachAggregate($sm->get('ZF\HttpCache\HttpCacheListener'));
+        $sm->get(HttpCacheListener::class)->attach($em);
     }
 }

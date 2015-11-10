@@ -28,12 +28,12 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function checkStatusCodeDataProvider()
     {
-        return array(
-            array(array(), 200, true),
-            array(array(), 404, false),
-            array(array('http_codes_black_list' => array(200)), 404, true),
-            array(array('http_codes_black_list' => array(404)), 404, false),
-        );
+        return [
+            [[], 200, true],
+            [[], 404, false],
+            [['http_codes_black_list' => [200]], 404, true],
+            [['http_codes_black_list' => [404]], 404, false],
+        ];
     }
 
     /**
@@ -42,207 +42,207 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function configDataProvider()
     {
-        return array(
-            array(
-                array('enable' => false),
+        return [
+            [
+                ['enable' => false],
                 'get',
-                array('controller' => 'foo'),
-                array(),
-            ),
+                ['controller' => 'foo'],
+                [],
+            ],
 
-            array(
-                array('enable' => true),
+            [
+                ['enable' => true],
                 'get',
-                array(),
-                array(),
-            ),
+                [],
+                [],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        'foo' => array(
-                            'get' => array(
-                                'expires' => array(
+                    'controllers' => [
+                        'foo' => [
+                            'get' => [
+                                'expires' => [
                                     'override' => true,
                                     'value'    => '+1 day',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 'get',
-                array('controller' => 'foo'),
-                array(
-                    'expires' => array(
+                ['controller' => 'foo'],
+                [
+                    'expires' => [
                         'override' => true,
                         'value'    => '+1 day',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        'foo' => array(
-                            '*' => array(
-                                'expires' => array(
+                    'controllers' => [
+                        'foo' => [
+                            '*' => [
+                                'expires' => [
                                     'override' => true,
                                     'value'    => '+1 day',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 'head',
-                array('controller' => 'foo'),
-                array(
-                    'expires' => array(
+                ['controller' => 'foo'],
+                [
+                    'expires' => [
                         'override' => true,
                         'value'    => '+1 day',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        '*' => array(
-                            'get' => array(
-                                'expires' => array(
+                    'controllers' => [
+                        '*' => [
+                            'get' => [
+                                'expires' => [
                                     'override' => true,
                                     'value'    => '+1 day',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 'get',
-                array('controller' => 'bar'),
-                array(
-                    'expires' => array(
+                ['controller' => 'bar'],
+                [
+                    'expires' => [
                         'override' => true,
                         'value'    => '+1 day',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        '*' => array(
-                            '*' => array(
-                                'expires' => array(
+                    'controllers' => [
+                        '*' => [
+                            '*' => [
+                                'expires' => [
                                     'override' => true,
                                     'value'    => '+1 day',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 'head',
-                array('controller' => 'baz'),
-                array(
-                    'expires' => array(
+                ['controller' => 'baz'],
+                [
+                    'expires' => [
                         'override' => true,
                         'value'    => '+1 day',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        '*' => array(
-                            '*' => array(
-                                'cache-control' => array(
+                    'controllers' => [
+                        '*' => [
+                            '*' => [
+                                'cache-control' => [
                                     'override' => false,
                                     'value'    => 'private',
-                                ),
-                            ),
-                        ),
-                        'baz' => array(
-                            'get' => array(
-                                'cache-control' => array(
+                                ],
+                            ],
+                        ],
+                        'baz' => [
+                            'get' => [
+                                'cache-control' => [
                                     'override' => true,
                                     'value'    => 'public',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 'head',
-                array('controller' => 'baz'),
-                array(
-                    'cache-control' => array(
+                ['controller' => 'baz'],
+                [
+                    'cache-control' => [
                         'override' => false,
                         'value'    => 'private',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        '~[a-z]{3}~' => array(
-                            '*' => array(
-                                'cache-control' => array(
+                    'controllers' => [
+                        '~[a-z]{3}~' => [
+                            '*' => [
+                                'cache-control' => [
                                     'override' => false,
                                     'value'    => 'private',
-                                ),
-                            ),
-                        ),
-                        '*' => array(
-                            'get' => array(
-                                'cache-control' => array(
+                                ],
+                            ],
+                        ],
+                        '*' => [
+                            'get' => [
+                                'cache-control' => [
                                     'override' => true,
                                     'value'    => 'public',
-                                ),
-                            ),
-                        ),
-                    ),
+                                ],
+                            ],
+                        ],
+                    ],
                     'regex_delimiter' => '~',
-                ),
+                ],
                 'head',
-                array('controller' => 'baz'),
-                array(
-                    'cache-control' => array(
+                ['controller' => 'baz'],
+                [
+                    'cache-control' => [
                         'override' => false,
                         'value'    => 'private',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
 
-            array(
-                array(
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        '~[a-z]{3}~' => array(
-                            '*' => array(
-                                'cache-control' => array(
+                    'controllers' => [
+                        '~[a-z]{3}~' => [
+                            '*' => [
+                                'cache-control' => [
                                     'override' => false,
                                     'value'    => 'private',
-                                ),
-                            ),
-                        ),
-                    ),
+                                ],
+                            ],
+                        ],
+                    ],
                     'regex_delimiter' => '~',
-                ),
+                ],
                 'head',
-                array('controller' => 'baz'),
-                array(
-                    'cache-control' => array(
+                ['controller' => 'baz'],
+                [
+                    'cache-control' => [
                         'override' => false,
                         'value'    => 'private',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -255,14 +255,14 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $response = new HttpResponse();
         $headers  = $response->getHeaders();
 
-        return array(
-            array('setCacheControl', array($headers)),
-            array('setCacheConfig',  array(array())),
-            array('setConfig',       array(array())),
-            array('setExpires',      array($headers)),
-            array('setPragma',       array($headers)),
-            array('setVary',         array($headers)),
-        );
+        return [
+            ['setCacheControl', [$headers]],
+            ['setCacheConfig',  [[]]],
+            ['setConfig',       [[]]],
+            ['setExpires',      [$headers]],
+            ['setPragma',       [$headers]],
+            ['setVary',         [$headers]],
+        ];
     }
 
     /**
@@ -271,43 +271,43 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function onResponseDataProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'enable' => true,
-                    'controllers' => array(
-                        'foo' => array(
-                            'get' => array(
-                                'cache-control' => array(
+                    'controllers' => [
+                        'foo' => [
+                            'get' => [
+                                'cache-control' => [
                                     'override' => true,
                                     'value'    => 'max-age=86400, must-revalidate, public',
-                                ),
-                                'expires' => array(
+                                ],
+                                'expires' => [
                                     'override' => true,
                                     'value'    => 'Fri, 10 Oct 2014 20:44:35 GMT',
-                                ),
-                                'pragma' => array(
+                                ],
+                                'pragma' => [
                                     'override' => true,
                                     'value'    => 'token',
-                                ),
-                                'vary' => array(
+                                ],
+                                'vary' => [
                                     'override' => true,
                                     'value'    => 'accept-encoding, x-requested-with',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 'get',
-                array('controller' => 'foo'),
-                array(
+                ['controller' => 'foo'],
+                [
                     'Expires'       => 'Fri, 10 Oct 2014 20:44:35 GMT',
                     'Cache-Control' => 'max-age=86400, must-revalidate, public',
                     'Pragma'        => 'token',
                     'Vary'          => 'accept-encoding, x-requested-with',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -317,32 +317,32 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function setCacheControlDataProvider()
     {
-        return array(
-            array(
-                array('cache-control' => array(
+        return [
+            [
+                ['cache-control' => [
                     'override' => true,
                     'value'    => 'max-age=86400, must-revalidate, public',
-                )),
-                array(),
-                array('Cache-Control' => 'max-age=86400, must-revalidate, public'),
-            ),
-            array(
-                array('cache-control' => array(
+                ]],
+                [],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, public'],
+            ],
+            [
+                ['cache-control' => [
                     'override' => true,
                     'value'    => 'max-age=86400, must-revalidate, public',
-                )),
-                array('Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'),
-                array('Cache-Control' => 'max-age=86400, must-revalidate, public'),
-            ),
-            array(
-                array('cache-control' => array(
+                ]],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, public'],
+            ],
+            [
+                ['cache-control' => [
                     'override' => false,
                     'value'    => 'max-age=86400, must-revalidate, public',
-                )),
-                array('Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'),
-                array('Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'),
-            ),
-        );
+                ]],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'],
+            ],
+        ];
     }
 
     /**
@@ -352,57 +352,57 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function setExpiresDataProvider()
     {
-        return array(
-            array(
-                array('expires' => array(
+        return [
+            [
+                ['expires' => [
                     'override' => true,
                     'value'    => '+1 day',
-                )),
-                array(),
-                array('Expires' => $this->calculateDate(86400)),
-            ),
-            array(
-                array('expires' => array(
+                ]],
+                [],
+                ['Expires' => $this->calculateDate(86400)],
+            ],
+            [
+                ['expires' => [
                     'override' => true,
                     'value'    => '+1 day',
-                )),
-                array('Expires' => $this->calculateDate(0)),
-                array('Expires' => $this->calculateDate(86400)),
-            ),
-            array(
-                array('expires' => array(
+                ]],
+                ['Expires' => $this->calculateDate(0)],
+                ['Expires' => $this->calculateDate(86400)],
+            ],
+            [
+                ['expires' => [
                     'override' => false,
                     'value'    => '+1 day',
-                )),
-                array('Expires' => $this->calculateDate(0)),
-                array('Expires' => $this->calculateDate(0)),
-            ),
+                ]],
+                ['Expires' => $this->calculateDate(0)],
+                ['Expires' => $this->calculateDate(0)],
+            ],
 
             /*
              * HTTP/1.1 clients and caches MUST treat other invalid date formats,
              * especially including the value "0", as in the past
              * (i.e., "already expired").
              */
-            array(
-                array('expires' => array(
+            [
+                ['expires' => [
                     'override' => true,
                     'value'    => 'junk-date',
-                )),
-                array(),
-                array('Expires' => $this->calculateDate(0)),
-            ),
-            array(
-                array('expires' => array(
+                ]],
+                [],
+                ['Expires' => $this->calculateDate(0)],
+            ],
+            [
+                ['expires' => [
                     'override' => true,
                     'value'    => 'junk-date',
-                )),
-                array('Date' => $this->calculateDate(10)),
-                array(
+                ]],
+                ['Date' => $this->calculateDate(10)],
+                [
                     'Date' => $this->calculateDate(10),
                     'Expires' => $this->calculateDate(10),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -412,32 +412,32 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function setPragmaDataProvider()
     {
-        return array(
-            array(
-                array('pragma' => array(
+        return [
+            [
+                ['pragma' => [
                     'override' => true,
                     'value'    => 'no-cache',
-                )),
-                array(),
-                array('Pragma' => 'no-cache'),
-            ),
-            array(
-                array('pragma' => array(
+                ]],
+                [],
+                ['Pragma' => 'no-cache'],
+            ],
+            [
+                ['pragma' => [
                     'override' => true,
                     'value'    => 'no-cache',
-                )),
-                array('Pragma' => 'token'),
-                array('Pragma' => 'no-cache'),
-            ),
-            array(
-                array('pragma' => array(
+                ]],
+                ['Pragma' => 'token'],
+                ['Pragma' => 'no-cache'],
+            ],
+            [
+                ['pragma' => [
                     'override' => false,
                     'value'    => 'no-cache',
-                )),
-                array('Pragma' => 'token'),
-                array('Pragma' => 'token'),
-            ),
-        );
+                ]],
+                ['Pragma' => 'token'],
+                ['Pragma' => 'token'],
+            ],
+        ];
     }
 
     /**
@@ -447,32 +447,32 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function setVaryDataProvider()
     {
-        return array(
-            array(
-                array('vary' => array(
+        return [
+            [
+                ['vary' => [
                     'override' => true,
                     'value'    => 'accept-encoding, x-requested-with',
-                )),
-                array(),
-                array('Vary' => 'accept-encoding, x-requested-with'),
-            ),
-            array(
-                array('vary' => array(
+                ]],
+                [],
+                ['Vary' => 'accept-encoding, x-requested-with'],
+            ],
+            [
+                ['vary' => [
                     'override' => true,
                     'value'    => 'accept-encoding, x-requested-with',
-                )),
-                array('Vary' => 'accept-encoding'),
-                array('Vary' => 'accept-encoding, x-requested-with'),
-            ),
-            array(
-                array('vary' => array(
+                ]],
+                ['Vary' => 'accept-encoding'],
+                ['Vary' => 'accept-encoding, x-requested-with'],
+            ],
+            [
+                ['vary' => [
                     'override' => false,
                     'value'    => 'accept-encoding, x-requested-with',
-                )),
-                array('Vary' => 'accept-encoding'),
-                array('Vary' => 'accept-encoding'),
-            ),
-        );
+                ]],
+                ['Vary' => 'accept-encoding'],
+                ['Vary' => 'accept-encoding'],
+            ],
+        ];
     }
 
     public function setUp()
@@ -509,9 +509,9 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testMethodsReturnsSelf($method, $args)
     {
-        $ret = call_user_func_array(array($this->instance, $method), $args);
+        $ret = call_user_func_array([$this->instance, $method], $args);
 
-        $this->assertInstanceOf('\ZF\HttpCache\HttpCacheListener', $ret);
+        $this->assertInstanceOf(HttpCacheListener::class, $ret);
     }
 
     /**
