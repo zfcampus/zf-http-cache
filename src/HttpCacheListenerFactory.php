@@ -27,7 +27,7 @@ class HttpCacheListenerFactory
             }
         }
 
-        $httpCacheListener = new HttpCacheListener();
+        $httpCacheListener = new HttpCacheListener($container);
         $httpCacheListener->setConfig($config);
 
         return $httpCacheListener;

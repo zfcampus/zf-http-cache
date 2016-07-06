@@ -92,7 +92,21 @@ A wildcard stands for all the non-specified HTTP methods.
 
 ##### Key: `<cache-header-name>` 
 
-A http cache header name (`Cache-control`, `Expires`, etc.).
+An HTTP cache header name (`Cache-control`, `expires`, `etag` etc.).
+
+###### ETags
+
+For ETags you can specify a custom generator in the configuration:
+
+```
+'etag' => array(
+    'override' => true,
+    'generator' => 'Your\Own\ETagGenerator'
+)
+```
+
+A generator example can be found in `\ZF\HttpCache\DefaultETagGenerator`. 
+
 
 ##### Key: `<cache-header-value>`
 

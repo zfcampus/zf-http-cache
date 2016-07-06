@@ -1,10 +1,13 @@
 <?php
 namespace ZFTest\HttpCache;
 
+use Interop\Container\ContainerInterface;
+use Prophecy\Argument;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
+use ZF\HttpCache\ETagGeneratorInterface;
 use ZF\HttpCache\HttpCacheListener;
 
 class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
@@ -475,6 +478,68 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
+     * @see testSetETag
+     * @return array
+     */
+    public function setETagDataProvider()
+    {
+        return [
+            [
+                ['etag' => [
+                    'override' => true
+                ]],
+                [],
+                ['Etag' => md5('')],
+            ],
+            [
+                ['vary' => [ ]],
+                ['Etag' => '1234'],
+                ['Etag' => '1234'],
+            ],
+            [
+                ['vary' => [
+                    'override' => false
+                ]],
+                ['Etag' => '1234'],
+                ['Etag' => '1234'],
+            ],
+            [
+                ['etag' => [
+                    'override' => true
+                ]],
+                ['Etag' => '1234'],
+                ['Etag' => md5('')],
+            ],
+        ];
+    }
+
+    /**
+     * @see testSetNotModified
+     * @return array
+     */
+    public function setNotModifiedDataProvider()
+    {
+        return [
+            [
+                [],
+                ['Etag' => '123'],
+                200,
+            ],
+            [
+                ['If-None-Match' => '1234'],
+                ['Etag' => '1234'],
+                304,
+            ],
+            [
+                ['If-None-Match' => '1234'],
+                ['Etag' => 'something-else'],
+                200
+            ],
+        ];
+    }
+
     public function setUp()
     {
         $this->instance = new HttpCacheListener();
@@ -664,5 +729,74 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->instance->setVary($headers);
 
         $this->assertSame($exHeaders, $headers->toArray());
+    }
+
+
+    /**
+     * @covers \ZF\HttpCache\HttpCacheListener::setETag
+     * @dataProvider setEtagDataProvider
+     *
+     * @param array $cacheConfig
+     * @param array $headers
+     * @param array $exHeaders
+     */
+    public function testSetETag(array $cacheConfig, array $headers, array $exHeaders)
+    {
+        $this->instance->setCacheConfig($cacheConfig);
+
+        $response = new HttpResponse();
+        $headers  = $response->getHeaders()
+            ->addHeaders($headers);
+
+        $this->instance->setETag(new HttpRequest(), $response);
+
+        $this->assertSame($exHeaders, $headers->toArray());
+    }
+
+    public function testSetETagGenerator()
+    {
+        $testGenerator = $this->prophesize(ETagGeneratorInterface::class);
+        $testGenerator->generate(Argument::any(), Argument::any())->willReturn('generated');
+
+        $container = $this->prophesize(ContainerInterface::class);
+        $container->has('test-etag-generator')->willReturn(true);
+        $container->get('test-etag-generator')->willReturn($testGenerator->reveal());
+
+        $httpCacheListener = new HttpCacheListener($container->reveal());
+        $httpCacheListener->setCacheConfig([
+            'etag' => [
+                'override' => true,
+                'generator' => 'test-etag-generator'
+            ],
+        ]);
+
+        $response = new HttpResponse();
+        $headers  = $response->getHeaders();
+
+        $httpCacheListener->setETag(new HttpRequest(), $response);
+
+        $this->assertSame(['Etag' => 'generated'], $headers->toArray());
+    }
+
+    /**
+     * @covers       \ZF\HttpCache\HttpCacheListener::setvary
+     * @dataProvider setNotModifiedDataProvider
+     *
+     * @param array $requestHeaders
+     * @param array $responseHeaders
+     * @param array $exStatusCode
+     * @internal param array $cacheConfig
+     */
+    public function testSetNotModified(array $requestHeaders, array $responseHeaders, $exStatusCode)
+    {
+        $request = new HttpRequest();
+        $request->getHeaders()->addHeaders($requestHeaders);
+
+        $response = new HttpResponse();
+        $response->getHeaders()->addHeaders($responseHeaders);
+
+        $this->instance->setNotModified($request, $response);
+
+        $this->assertSame($exStatusCode, $response->getStatusCode());
     }
 }
