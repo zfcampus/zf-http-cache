@@ -108,13 +108,16 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
-        if (! $this->checkStatusCode($response)) {
+        /** @var $request HttpRequest */
+        $request = $e->getRequest();
+
+        if (! $request instanceof HttpRequest) {
             return;
         }
 
-
-        /** @var $request HttpRequest */
-        $request = $e->getRequest();
+        if (! $this->checkStatusCode($response)) {
+            return;
+        }
 
         /* @var $headers Headers */
         $headers = $response->getHeaders();
